@@ -143,6 +143,28 @@
 .dropdown-content a:hover {
   background-color: #f0f0f0;
 }
+.tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  pointer-events: none;
+  z-index: 1000;
+  max-width: 250px;
+}
+
+.tooltip-header {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.files-list {
+  margin-top: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+}
  
   </style>
 </head>
@@ -169,7 +191,7 @@
     <button class="toggle-btn" onclick="showSection('design-pattern')">Design Pattern</button>
     <button class="toggle-btn" onclick="showSection('documentation-dependency')">Documentation and Dependency</button>
     <button class="toggle-btn" onclick="showSection('dependency-graphs')">Dependency Graphs</button>
-    <button class="toggle-btn" onclick="showSection('analysis-plan')">Java Springboot</button>
+    <button class="toggle-btn" onclick="showSection('analysis-plan')">JavaSpark</button>
   </div>
  
  
@@ -289,6 +311,7 @@
     <div id="treemap-dependency" class="graph-container">
       <div class="graph-title">Treemap of Dependencies</div>
       <svg id="treemap"></svg>
+      <div id="treemap-tooltip" class="tooltip" style="display: none;"></div>
      
     </div>
   </div>
@@ -513,19 +536,33 @@
  
   function getFlatDependencyData(data) {
   const countMap = {};
- 
+  const filesMap = {}; // Store which files use each dependency
+  
   // Count how many times each file appears as a dependency
-  Object.values(data).flat().forEach(dep => {
-    countMap[dep] = (countMap[dep] || 0) + 1;
+  Object.entries(data).forEach(([parent, children]) => {
+    children.forEach(dep => {
+      countMap[dep] = (countMap[dep] || 0) + 1;
+      
+      // Track which files use this dependency
+      if (!filesMap[dep]) filesMap[dep] = [];
+      filesMap[dep].push(parent);
+    });
   });
- 
-  // Make sure all files from the keys are also included (some may have 0 dependents)
+  
+  // Make sure all files from the keys are also included
   Object.keys(data).forEach(file => {
-    if (!countMap[file]) countMap[file] = 0;
+    if (!countMap[file]) {
+      countMap[file] = 0;
+      filesMap[file] = []; // Empty array for files not used as dependencies
+    }
   });
- 
-  // Convert to flat array of { name, value }
-  return Object.entries(countMap).map(([name, value]) => ({ name, value }));
+  
+  // Convert to flat array with files information
+  return Object.entries(countMap).map(([name, value]) => ({ 
+    name, 
+    value,
+    filesUsing: filesMap[name] || [] // Include files using this dependency
+  }));
 }
  
   fetch('dependency.json')
@@ -569,12 +606,73 @@ const colorScale = d3.scaleQuantize()
      
  
       .attr("stroke", "#fff")
-      .on("mouseover", function () {
-  d3.select(this).attr("stroke", "#333").attr("stroke-width", 2);
-})
-.on("mouseout", function () {
+.on("click", function(event, d) {
+  // Create or update a details panel
+  let detailsPanel = d3.select("body").select("#dependency-details");
+  
+  if (detailsPanel.empty()) {
+    detailsPanel = d3.select("body").append("div")
+      .attr("id", "dependency-details")
+      .style("position", "fixed")
+      .style("top", "100px")
+      .style("right", "20px")
+      .style("width", "300px")
+      .style("background", "white")
+      .style("border", "1px solid #ccc")
+      .style("border-radius", "5px")
+      .style("padding", "15px")
+      .style("box-shadow", "0 4px 8px rgba(0,0,0,0.2)")
+      .style("z-index", "1000");
+      
+    detailsPanel.append("button")
+      .style("position", "absolute")
+      .style("top", "5px")
+      .style("right", "5px")
+      .style("background", "none")
+      .style("border", "none")
+      .style("font-size", "16px")
+      .style("cursor", "pointer")
+      .text("×")
+      .on("click", function() {
+        detailsPanel.style("display", "none");
+      });
+      
+    detailsPanel.append("h3")
+      .attr("id", "details-title");
+      
+    detailsPanel.append("div")
+      .attr("id", "details-content");
+  } else {
+    detailsPanel.style("display", "block");
+  }
+  
+  const filesUsing = d.data.filesUsing || [];
+  
+  detailsPanel.select("#details-title").text(d.data.name);
+  
+  let content = `<p>Used ${d.value} time${d.value !== 1 ? 's' : ''}</p>`;
+  
+  if (filesUsing.length > 0) {
+    content += `
+      <p><strong>Used by:</strong></p>
+      <ul style="padding-left: 15px; margin-top: 3px; max-height: 300px; overflow-y: auto;">
+        ${filesUsing.map(file => `<li>${file}</li>`).join('')}
+      </ul>
+    `;
+  }
+  
+  detailsPanel.select("#details-content").html(content);
+})      
+.on("mouseout", function() {
   d3.select(this).attr("stroke", "#fff").attr("stroke-width", 1);
+  d3.select("#treemap-tooltip").style("display", "none");
 })
+.on("mousemove", function(event) {
+  d3.select("#treemap-tooltip")
+    .style("left", (event.pageX + 10) + "px")
+    .style("top", (event.pageY - 10) + "px");
+})
+
  
  
  
