@@ -1,0 +1,112 @@
+{
+"ClaimsDW_SQLServer_DDL.sql": {
+"1. Script Overview": {
+"Summary": "This SSIS script is designed to create and manage the data warehouse structure for claims processing. It addresses the need for structured and efficient data storage for claims, checks, claimants, exposures, loss locations, users, transactions, and audit logs. The script connects to SQL Server and serves as the backbone for claims data analysis and reporting. Key operations include table creation, field definitions, and constraints for data integrity.",
+"Functional Modules": [
+"DimClaim: Stores claim details.",
+"DimCheck: Stores check details.",
+"DimClaimant: Stores claimant information.",
+"DimExposure: Stores exposure details.",
+"DimLossLocation: Stores loss location information.",
+"DimUser: Stores user details.",
+"FactClaimTransaction: Stores claim transactions.",
+"LossBodyParts: Stores body part injury details.",
+"Audit: Logs ETL process details.",
+"AuditReference: Stores ETL package references.",
+"ErrorLog: Captures error messages.",
+"BatchIdentifier: Tracks batch processing."
+],
+"Data Pipelines Overview": "The script defines the structure for raw data ingestion into the data warehouse. Data flows from external systems into staging tables, then into dimension and fact tables. Each table is designed to store specific aspects of claims processing, such as claim details, payment information, claimant data, and audit logs. The flow ensures data is organized for efficient querying and reporting."
+},
+"2. Complexity Metrics": {
+"Total Lines of Code": 300,
+"Dataset Count": 12,
+"Transform Count and Types": [],
+"Join Analysis": {
+"Join Count": 0,
+"Join Types": []
+},
+"Project, Sort, Dedup, Rollup Counts": {
+"Project Count": 0,
+"Sort Count": 0,
+"Dedup Count": 0,
+"Rollup Count": 0
+},
+"Child Workflows or Module Calls": 0,
+"Output or Store Operations": 0,
+"Conditional Logic Count": 0,
+"Macro or Function Module Reuse": 0,
+"Conversion Complexity Score": {
+"Score (0–100)": 45,
+"Reasoning": [
+"No explicit joins or transforms.",
+"Straightforward table creation logic.",
+"Minimal manual refactoring required for migration."
+]
+}
+},
+"3. Feature Compatibility Check": {
+"Incompatible Features": [],
+"Examples of Challenging Constructs": []
+},
+"4. Manual Adjustments for Java Spark Migration": {
+"Transform Refactoring": "No transforms present in the script.",
+"Schema Redefinition": "Convert table definitions to Spark schema objects or case classes.",
+"Join Handling Strategy": "No joins present in the script.",
+"Complex Ops Handling": "No complex operations like NORMALIZE, ROLLUP, or DEDUP present in the script.",
+"Output Refactoring": "Rewrite table definitions to HDFS, Parquet, or other Spark-supported formats."
+},
+"5. Optimization Techniques in Spark": {
+"Join Optimization": "Not applicable as no joins are present.",
+"Partitioning Strategy": "Partition large tables like FactClaimTransaction based on key fields such as ClaimID or ExposureID.",
+"Caching Strategy": "Cache intermediate results for frequently queried tables.",
+"Code Optimization Techniques": "Leverage Catalyst optimizer hints and DataFrame API for efficient processing.",
+"Refactor vs Rebuild Recommendation": {
+"Approach": "Refactor with minimal changes.",
+"Justification": "The script is primarily table creation logic, which can be directly mapped to Spark schema definitions with minimal adjustments."
+}
+},
+"6. Cost Estimation": {
+"Java Spark Runtime Cost": {
+"Cluster Configuration": {
+"Number of Executors": 4,
+"Executor Memory": "16 GB",
+"Driver Memory": "8 GB"
+},
+"Approximate Data Volume Processed": {
+"Input Data": "50–100 GB",
+"Output Data": "10–15 GB"
+},
+"Time Taken for Each Phase": {
+"Shuffle-heavy Joins": "Not applicable.",
+"Wide Transforms": "Not applicable.",
+"Output Writes": "1 hour"
+},
+"Cost Model": {
+"Pricing Basis": "Cloud provider pricing details (e.g., DBU cost per hour)",
+"Total Estimated Cost": "Example calculation showing cost formula"
+},
+"Justification": [
+"Minimal processing logic.",
+"Direct mapping of table definitions to Spark schema objects."
+]
+}
+},
+"7. Code Fixing and Data Recon Testing Effort Estimation": {
+"Estimated Effort in Hours": {
+"Manual Refactoring": 10,
+"Data Reconciliation Testing": 15,
+"Syntax Translation Adjustments": 5,
+"Optimization and Performance Tuning": 10
+},
+"Major Contributors to Effort": {
+"Nested TRANSFORM Refactoring": 0,
+"Output Refactoring for Spark Writes": 5,
+"Schema Management Effort": 10
+}
+},
+"8. API Cost": {
+"apiCost": "0.013452 USD"
+}
+}
+}

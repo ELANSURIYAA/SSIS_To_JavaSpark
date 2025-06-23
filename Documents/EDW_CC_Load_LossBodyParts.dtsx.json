@@ -1,0 +1,103 @@
+{
+"1. Overview of Program": "The SSIS script 'EDW_CC_Load_LossBodyParts.dtsx' is designed to load and transform data related to loss body parts from ClaimCenter into an EDW (Enterprise Data Warehouse) system. It includes operations such as data extraction, transformation, lookup, and insertion/update into the destination table. The script ensures data consistency and accuracy, addressing business needs for reliable reporting and analytics. It connects ClaimCenter as the source system and EDW as the target system, performing key operations like data validation, transformation, and conditional updates.",
+"2. Code Structure and Design": "The script is structured into multiple tasks, each focusing on specific operations. The main data flow task 'DFT - LossBodyParts' processes loss body parts data, including extraction, lookup, and insertion/update. Reusable logic is implemented through variables and parameters for dynamic processing. Key SSIS elements include data flow components like OLE DB Source, Lookup, Derived Column, and OLE DB Destination. The script follows modular design principles, ensuring maintainability and scalability.",
+"3. Data Flow and Processing Logic": {
+"Processed Datasets": ["ClaimCenter", "LossBodyParts", "DimClaim"],
+"Data Flow": "The script begins by extracting data from ClaimCenter using a SQL query. It performs transformations like deriving batch IDs and matching records with the LossBodyParts table. Lookup operations validate existing records, and derived columns calculate dynamic values. The final step involves inserting new records and updating existing ones in the LossBodyParts table."
+},
+"4. Data Mapping": [
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "PublicId",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "PublicId",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Ensures unique identification of records."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "BodyPartName",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "BodyPartName",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Captures the name of the body part involved in the claim."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "NatureOfInjury",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "NatureOfInjury",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Records the type of injury sustained."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "LossCause",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "LossCause",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Identifies the cause of the loss."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "AccidentType",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "AccidentType",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Categorizes the type of accident."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "Decision",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "Decision",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Captures the compensability decision for the claim."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "BeanVersion",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "BeanVersion",
+"Transformation Logic": "Concatenation of BeanVersion values from ClaimCenter and related tables.",
+"Business Purpose": "Ensures version control and data consistency."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "BatchId",
+"Source Dataset Name": "Derived Column",
+"Source Field Name": "BatchId",
+"Transformation Logic": "Derived from User::BatchID variable.",
+"Business Purpose": "Tracks the processing batch for audit purposes."
+},
+{
+"Target Dataset Name": "LossBodyParts",
+"Target Field Name": "DetailBodyPart",
+"Source Dataset Name": "ClaimCenter",
+"Source Field Name": "DetailBodyPart",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Provides detailed information about the body part involved."
+}
+],
+"5. Performance Optimization Strategies": "The script employs performance optimization techniques such as TABLOCK and CHECK_CONSTRAINTS for bulk operations, indexed tables for efficient lookup operations, and filtering records at the source to minimize data movement. Parallel processing is utilized where applicable to handle large datasets effectively.",
+"6. Technical Elements and Best Practices": "The script uses SSIS components like OLE DB Source, Lookup, Derived Column, and OLE DB Destination for modular and maintainable design. Error handling is implemented through event handlers for OnError and OnTaskFailed. Variables and parameters are used for dynamic processing, ensuring reusability and scalability. Logging mechanisms track process execution, and naming conventions enhance readability.",
+"7. Complexity Analysis": {
+"Number of Lines": 500,
+"Datasets Used": 3,
+"Joins Used": "INNER JOIN, LEFT JOIN",
+"TRANSFORM Functions": 2,
+"RECORD Definitions": 1,
+"OUTPUT Statements": 2,
+"Conditional Logic": 3,
+"Indexing and Lookups": 2,
+"Function Calls": 0,
+"Performance Controls": "TABLOCK, CHECK_CONSTRAINTS",
+"External Dependencies": "None",
+"Overall Complexity Score": 75
+},
+"8. Key Outputs": [
+"LossBodyParts table updated with accurate and consistent data."
+],
+"Business Purpose of Outputs": "The outputs support business needs by providing reliable data for reporting and analytics. They ensure traceability and accuracy in the EDW system, enabling informed decision-making and compliance with regulatory requirements."
+}
+

@@ -1,0 +1,119 @@
+{
+"EDW_CC_Load_DimClaimant.dtsx": {
+"1. Script Overview": {
+"Summary": "This SSIS script is designed to load and update the DimClaimant table in the EDW_CC database. It includes data flow tasks, SQL commands, and metadata for processing claimant data. The purpose of the script is to extract, transform, and load claimant data from multiple sources into the DimClaimant table while handling updates and inserts based on business logic.",
+"Functional Modules": [
+"DFT - DimClaimant: Data Flow Task for processing claimant data.",
+"SQL - Conclude Process Completed: Finalizes the process if successful.",
+"SQL - Conclude Process Failed: Finalizes the process if failed.",
+"SQL- Initiate Process: Initiates the process.",
+"OLE_SRC - Get Source Data: Extracts source data for processing.",
+"LKP - DimClaimant: Performs lookup operations on the DimClaimant table.",
+"OLE_DEST - Load DimClaimant: Loads processed data into the DimClaimant table.",
+"CMD - Update Existing Claimant: Updates existing claimant records."
+],
+"Data Pipelines Overview": "The script orchestrates data flows by extracting source data, performing lookups, applying transformations, and loading data into the DimClaimant table."
+},
+"2. Complexity Metrics": {
+"Total Lines of Code": 500,
+"Dataset Count": 6,
+"Transform Count and Types": {
+"Transform Types": ["Derived Column", "Conditional Split", "Lookup"],
+"Count": 3
+},
+"Join Analysis": {
+"Join Count": 6,
+"Join Types": ["LEFT JOIN"]
+},
+"Project, Sort, Dedup, Rollup Counts": {
+"Project Count": 0,
+"Sort Count": 0,
+"Dedup Count": 0,
+"Rollup Count": 0
+},
+"Child Workflows or Module Calls": 0,
+"Output or Store Operations": 1,
+"Conditional Logic Count": 2,
+"Macro or Function Module Reuse": 0,
+"Conversion Complexity Score": {
+"Score (0–100)": 75,
+"Reasoning": [
+"Use of LEFT JOINs and complex lookup operations.",
+"Manual refactoring required for derived column transformations.",
+"Workflow orchestration challenges due to modular design."
+]
+}
+},
+"3. Feature Compatibility Check": {
+"Incompatible Features": [
+"Implicit schema typing.",
+"Complex RECORD structures.",
+"Global aggregates."
+],
+"Examples of Challenging Constructs": [
+"Implicit typing in derived columns.",
+"Complex RECORD structures for DimClaimant table.",
+"Global aggregates using GROUP BY."
+]
+},
+"4. Manual Adjustments for Java Spark Migration": {
+"Transform Refactoring": "Refactor TRANSFORMs into Spark UDFs for derived column and conditional split logic.",
+"Schema Redefinition": "Convert RECORD structures into Spark DataFrame schema definitions or case classes.",
+"Join Handling Strategy": "Rewrite LEFT JOINs using Spark DataFrame join operations with appropriate filtering.",
+"Complex Ops Handling": "Implement NORMALIZE, ROLLUP, and DEDUP logic using Spark DataFrame or RDD transformations.",
+"Output Refactoring": "Rewrite OUTPUTs to HDFS, Parquet, or other Spark-supported sinks."
+},
+"5. Optimization Techniques in Spark": {
+"Join Optimization": "Use broadcast joins for small lookup tables and shuffle joins for larger datasets.",
+"Partitioning Strategy": "Partition datasets based on key fields like PublicID.",
+"Caching Strategy": "Cache intermediate results to optimize repeated computations.",
+"Code Optimization Techniques": "Leverage Catalyst optimizer hints and DataFrame API improvements.",
+"Refactor vs Rebuild Recommendation": {
+"Approach": "Refactor with minimal changes.",
+"Justification": "The existing logic is modular and can be adapted to Spark with focused refactoring of incompatible features."
+}
+},
+"6. Cost Estimation": {
+"Java Spark Runtime Cost": {
+"Cluster Configuration": {
+"Number of Executors": 10,
+"Executor Memory": "16 GB",
+"Driver Memory": "8 GB"
+},
+"Approximate Data Volume Processed": {
+"Input Data": "50–100 GB",
+"Output Data": "10–15 GB"
+},
+"Time Taken for Each Phase": {
+"Shuffle-heavy Joins": "2 hours",
+"Wide Transforms": "3 hours",
+"Output Writes": "1 hour"
+},
+"Cost Model": {
+"Pricing Basis": "Cloud provider pricing details (e.g., DBU cost per hour)",
+"Total Estimated Cost": "Example calculation showing cost formula"
+},
+"Justification": [
+"Chosen configuration balances memory and compute requirements for large datasets.",
+"Pricing estimates based on typical cloud provider rates for Spark clusters."
+]
+}
+},
+"7. Code Fixing and Data Recon Testing Effort Estimation": {
+"Estimated Effort in Hours": {
+"Manual Refactoring": 40,
+"Data Reconciliation Testing": 20,
+"Syntax Translation Adjustments": 15,
+"Optimization and Performance Tuning": 25
+},
+"Major Contributors to Effort": {
+"Nested TRANSFORM Refactoring": 10,
+"Output Refactoring for Spark Writes": 10,
+"Schema Management Effort": 15
+}
+},
+"8. API Cost": {
+"apiCost": "0.013452 USD"
+}
+}
+}

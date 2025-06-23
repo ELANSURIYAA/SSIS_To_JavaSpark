@@ -1,0 +1,44 @@
+{
+  "1. Cost Estimation": {
+    "1.1 Java Spark Runtime Cost": {
+      "Cluster Configuration": {
+        "Number of Executors": 4,
+        "Executor Memory": "16 GB",
+        "Driver Memory": "8 GB"
+      },
+      "Approximate Data Volume Processed": {
+        "Input Data": "500 GB (DimExposure table and related datasets)",
+        "Output Data": "50 GB (processed and transformed data)"
+      },
+      "Time Taken for Each Phase": {
+        "Shuffle-heavy JOINs": "2 hours",
+        "Wide Transforms (e.g., ROLLUP, DENORMALIZE)": "3 hours",
+        "Output Writes": "1 hour"
+      },
+      "Cost Model": {
+        "Pricing Model (e.g., DBU, vCPU Hour)": "DBU cost per hour ($0.0146 - $0.1008 based on cluster size)",
+        "Total Runtime Cost": "Approximately $0.25 - $1.73 per hour (calculated based on cluster configuration and runtime)"
+      },
+      "Justification": [
+        "Cluster configuration ensures efficient processing of large datasets.",
+        "Pricing estimates are based on typical cloud provider rates for Spark clusters."
+      ]
+    }
+  },
+  "2. Code Fixing and Data Recon Testing Effort Estimation": {
+    "2.1 Estimated Effort in Hours": {
+      "Manual intervention and solutions of complex constructs during SSIS to Spark translation": 40,
+      "Data recon and pipeline testing, including test case creation, validation of intermediate datasets, and output comparison": 20,
+      "Syntax Differences": 15,
+      "Optimization Techniques": 25
+    },
+    "Major Contributors": {
+      "Rewriting nested TRANSFORMs or rollups": 10,
+      "Refactoring OUTPUT statements for Spark write APIs": 10,
+      "Managing schema consistency across distributed stages": 20
+    }
+  },
+  "3. API Cost": {
+    "apiCost": "0.013452 USD"
+  }
+}

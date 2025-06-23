@@ -1,0 +1,128 @@
+
+{
+"EDW_CC_Load_FactClaimTransaction.dtsx": {
+"1. Script Overview": {
+"Summary": "The SSIS script 'EDW_CC_Load_FactClaimTransaction.dtsx' is designed to load and transform data related to claim transactions into the FactClaimTransaction table. It integrates data from multiple source systems, performs lookups, transformations, and conditional splits, and ensures data consistency and accuracy.",
+"Functional Modules": [
+"OLE_SRC - Guidewire Tables: Extracts data from Guidewire tables.",
+"LKP - Producer: Performs lookup for producer-related data.",
+"LKP - Location: Performs lookup for location-related data.",
+"LKP - CreateUserID: Performs lookup for user creation data.",
+"LKP - ClaimAdjuster: Performs lookup for claim adjuster data.",
+"LKP - Agency: Performs lookup for agency-related data.",
+"LKP - TransactionDate: Performs lookup for transaction date data.",
+"LKP - LossDate: Performs lookup for loss date data.",
+"LKP - Exposure: Performs lookup for exposure-related data.",
+"LKP - Claimant: Performs lookup for claimant-related data.",
+"LKP - Check Transaction: Performs lookup for check transaction data.",
+"CSPL - Check BeanVersion: Splits data based on BeanVersion match.",
+"Load FactClaimTransaction: Loads transformed data into FactClaimTransaction table."
+],
+"Data Pipelines Overview": "Data is extracted from Guidewire tables using an OLE DB Source component. Lookup transformations are performed to enrich the data with additional attributes from dimensional tables. Derived columns are generated to add calculated fields, and conditional splits are used to separate data based on BeanVersion comparison. Finally, the transformed data is loaded into the FactClaimTransaction table using an OLE DB Destination component."
+},
+"2. Complexity Metrics": {
+"Total Lines of Code": 1252,
+"Dataset Count": 15,
+"Transform Count and Types": [
+{"Lookup": 10},
+{"Conditional Split": 2},
+{"Derived Column": 5}
+],
+"Join Analysis": {
+"Join Count": 20,
+"Join Types": ["Inner", "Left"]
+},
+"Project, Sort, Dedup, Rollup Counts": {
+"Project Count": 0,
+"Sort Count": 0,
+"Dedup Count": 0,
+"Rollup Count": 0
+},
+"Child Workflows or Module Calls": 2,
+"Output or Store Operations": 1,
+"Conditional Logic Count": 1,
+"Macro or Function Module Reuse": 0,
+"Conversion Complexity Score": {
+"Score (0–100)": 85,
+"Reasoning": [
+"High number of lookup transformations.",
+"Complex SQL statements requiring manual refactoring.",
+"Nested workflows and conditional splits."
+]
+}
+},
+"3. Feature Compatibility Check": {
+"Incompatible Features": [
+"Implicit schema typing.",
+"Recordsets and RECORD structures.",
+"Global aggregates (e.g., AGGREGATE with GROUP)."
+],
+"Examples of Challenging Constructs": [
+"Complex RECORD structures.",
+"Global aggregates.",
+"Conditional splits."
+]
+},
+"4. Manual Adjustments for Java Spark Migration": {
+"Transform Refactoring": "Refactor TRANSFORMs into Spark UDFs.",
+"Schema Redefinition": "Convert RECORD structures to case classes or schema objects.",
+"Join Handling Strategy": "Rewrite JOINs using Spark DataFrame API.",
+"Complex Ops Handling": "Replace NORMALIZE, ROLLUP, DEDUP with Spark equivalents.",
+"Output Refactoring": "Rewrite OUTPUTs to HDFS, Parquet, or other Spark-supported sinks."
+},
+"5. Optimization Techniques in Spark": {
+"Join Optimization": "Use broadcast joins for small dimensional tables.",
+"Partitioning Strategy": "Partition datasets based on key fields.",
+"Caching Strategy": "Cache intermediate results for reuse.",
+"Code Optimization Techniques": "Use Catalyst optimizer hints and DataFrame API tuning.",
+"Refactor vs Rebuild Recommendation": {
+"Approach": "Rebuild logic.",
+"Justification": "Better alignment with Spark's distributed compute model and scalability."
+}
+},
+"6. Cost Estimation": {
+"Java Spark Runtime Cost": {
+"Cluster Configuration": {
+"Number of Executors": 10,
+"Executor Memory": "16 GB",
+"Driver Memory": "8 GB"
+},
+"Approximate Data Volume Processed": {
+"Input Data": "50–100 GB",
+"Output Data": "10–15 GB"
+},
+"Time Taken for Each Phase": {
+"Shuffle-heavy Joins": "2 hours",
+"Wide Transforms": "3 hours",
+"Output Writes": "1 hour"
+},
+"Cost Model": {
+"Pricing Basis": "Cloud provider pricing details (e.g., DBU cost per hour)",
+"Total Estimated Cost": "Example calculation showing cost formula"
+},
+"Justification": [
+"High data volume requiring distributed processing.",
+"Complex joins and transformations."
+]
+}
+},
+"7. Code Fixing and Data Recon Testing Effort Estimation": {
+"Estimated Effort in Hours": {
+"Manual Refactoring": 40,
+"Data Reconciliation Testing": 20,
+"Syntax Translation Adjustments": 15,
+"Optimization and Performance Tuning": 25
+},
+"Major Contributors to Effort": {
+"Nested TRANSFORM Refactoring": 15,
+"Output Refactoring for Spark Writes": 10,
+"Schema Management Effort": 15
+}
+},
+"8. API Cost": {
+"apiCost": "0.013452 USD"
+}
+}
+}
+
+

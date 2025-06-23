@@ -1,0 +1,114 @@
+{
+"EDW_CC_Load_DimExposure.dtsx": {
+"1. Script Overview": {
+"Summary": "This SSIS script is designed to load and update the DimExposure dimension table in a data warehouse. It integrates data from multiple sources, performs transformations, and ensures data consistency for reporting and analytics.",
+"Functional Modules": [
+"Data flow tasks: Extract staging data, lookup transformations for validation, derived columns for calculated fields, conditional splits for data categorization.",
+"SQL commands: Update DimExposure table with calculated fields and batch processing.",
+"Event handlers: Log errors and ensure process continuity."
+],
+"Data Pipelines Overview": "The data flow begins with extracting staging data using an OLE DB source. Lookup transformations validate existing records in DimExposure. Derived columns calculate additional fields such as BatchID and LegacySourceSystem. Conditional splits segregate data into insert, update, and unchanged categories. Finally, the data is loaded into the DimExposure table using an OLE DB destination."
+},
+"2. Complexity Metrics": {
+"Total Lines of Code": 1252,
+"Dataset Count": 3,
+"Transform Count and Types": [
+{"Type": "Derived Column", "Count": 1},
+{"Type": "Lookup Transformation", "Count": 1},
+{"Type": "Conditional Split", "Count": 1}
+],
+"Join Analysis": {
+"Join Count": 1,
+"Join Types": ["LEFT JOIN"]
+},
+"Project, Sort, Dedup, Rollup Counts": {
+"Project Count": 0,
+"Sort Count": 0,
+"Dedup Count": 0,
+"Rollup Count": 0
+},
+"Child Workflows or Module Calls": 0,
+"Output or Store Operations": 1,
+"Conditional Logic Count": 3,
+"Macro or Function Module Reuse": 0,
+"Conversion Complexity Score": {
+"Score (0–100)": 75,
+"Reasoning": [
+"Use of incompatible features like derived columns and conditional splits.",
+"Manual refactor points for SQL-based transformations.",
+"Workflow orchestration challenges due to modularity."
+]
+}
+},
+"3. Feature Compatibility Check": {
+"Incompatible Features": [
+"Implicit schema typing.",
+"Derived column transformations.",
+"Conditional splits for data categorization."
+],
+"Examples of Challenging Constructs": [
+"Complex RECORD structures.",
+"Global aggregates with GROUP."
+]
+},
+"4. Manual Adjustments for Java Spark Migration": {
+"Transform Refactoring": "Rewrite derived column transformations as Spark UDFs.",
+"Schema Redefinition": "Convert RECORD structures to case classes or schema objects.",
+"Join Handling Strategy": "Use Spark DataFrame API for LEFT JOINs.",
+"Complex Ops Handling": "Implement conditional splits using Spark filter and where clauses.",
+"Output Refactoring": "Rewrite OUTPUTs to HDFS or Parquet."
+},
+"5. Optimization Techniques in Spark": {
+"Join Optimization": "Use broadcast joins for small lookup tables.",
+"Partitioning Strategy": "Partition datasets based on PublicID and BeanVersion.",
+"Caching Strategy": "Cache intermediate results for repeated transformations.",
+"Code Optimization Techniques": "Leverage Catalyst optimizer hints and DataFrame API tuning.",
+"Refactor vs Rebuild Recommendation": {
+"Approach": "Refactor with minimal changes.",
+"Justification": "The existing logic aligns well with Spark's capabilities, but minor adjustments are needed for compatibility."
+}
+},
+"6. Cost Estimation": {
+"Java Spark Runtime Cost": {
+"Cluster Configuration": {
+"Number of Executors": 4,
+"Executor Memory": "16 GB",
+"Driver Memory": "8 GB"
+},
+"Approximate Data Volume Processed": {
+"Input Data": "50–100 GB",
+"Output Data": "10–15 GB"
+},
+"Time Taken for Each Phase": {
+"Shuffle-heavy Joins": "2 hours",
+"Wide Transforms": "3 hours",
+"Output Writes": "1 hour"
+},
+"Cost Model": {
+"Pricing Basis": "Cloud provider pricing details (e.g., DBU cost per hour)",
+"Total Estimated Cost": "Example calculation showing cost formula"
+},
+"Justification": [
+"The cluster configuration ensures efficient processing of large datasets.",
+"Pricing estimates are based on typical cloud provider rates."
+]
+}
+},
+"7. Code Fixing and Data Recon Testing Effort Estimation": {
+"Estimated Effort in Hours": {
+"Manual Refactoring": 40,
+"Data Reconciliation Testing": 20,
+"Syntax Translation Adjustments": 15,
+"Optimization and Performance Tuning": 25
+},
+"Major Contributors to Effort": {
+"Nested TRANSFORM Refactoring": 10,
+"Output Refactoring for Spark Writes": 10,
+"Schema Management Effort": 20
+}
+},
+"8. API Cost": {
+"apiCost": "0.013452 USD"
+}
+}
+}

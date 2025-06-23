@@ -1,0 +1,46 @@
+{
+"1. Overview of Program": "The SSIS script 'EDW_CC_Load_FactClaimTransaction.dtsx' is designed to load and transform data related to claim transactions into the FactClaimTransaction table. It integrates data from multiple source systems, performs lookups, transformations, and conditional splits, and ensures data consistency and accuracy. The script addresses the business need for maintaining accurate and up-to-date claim transaction records, which are critical for financial reporting and operational analysis. It connects to Guidewire tables and other dimensional tables to retrieve and process data, ensuring seamless integration and traceability.",
+"2. Code Structure and Design": "The script is structured around a main Data Flow Task named 'DFT - Load $0 Facts'. This task contains multiple components, including OLE DB Source, Lookup transformations, Derived Column transformations, Conditional Splits, and OLE DB Destination. Each component is designed to perform specific operations, such as extracting data, performing lookups, generating derived columns, splitting data based on conditions, and loading data into the destination table. The design ensures modularity and reusability, with clear naming conventions and logical grouping of tasks.",
+"3. Data Flow and Processing Logic": {
+"Processed Datasets": ["Guidewire Tables", "DimProducer", "DimLocation", "DimCreateUserID", "DimClaimAdjuster", "DimAgency", "DimTransactionDate", "DimLossDate", "DimExposure", "DimClaimant", "DimCheckTransaction", "DimPolicy", "DimExposureAdjuster", "DimCompany"],
+"Data Flow": "Data is extracted from Guidewire tables using an OLE DB Source component. Lookup transformations are performed to enrich the data with additional attributes from dimensional tables. Derived columns are generated to add calculated fields, and conditional splits are used to separate data based on BeanVersion comparison. Finally, the transformed data is loaded into the FactClaimTransaction table using an OLE DB Destination component."
+},
+"4. Data Mapping": [
+{
+"Target Dataset Name": "FactClaimTransaction",
+"Target Field Name": "AccountId",
+"Source Dataset Name": "Guidewire Tables",
+"Source Field Name": "AccountNumber",
+"Transformation Logic": "Direct mapping with validation for null values.",
+"Business Purpose": "Links transactions to the corresponding account."
+},
+{
+"Target Dataset Name": "FactClaimTransaction",
+"Target Field Name": "AgencyId",
+"Source Dataset Name": "DimAgency",
+"Source Field Name": "AgencyName",
+"Transformation Logic": "Direct mapping with validation for null values.",
+"Business Purpose": "Identifies the agency associated with the transaction."
+}
+],
+"5. Performance Optimization Strategies": "The script uses Lookup transformations to minimize data retrieval time by caching results. Conditional splits are used to filter data efficiently, reducing processing overhead. Derived columns are calculated inline to avoid additional processing steps. Data loading is optimized using batch operations with TABLOCK and CHECK_CONSTRAINTS options. Parallelism is achieved by splitting tasks into multiple components, ensuring efficient utilization of resources.",
+"6. Technical Elements and Best Practices": "The script uses OLE DB Source and Destination components for data extraction and loading. Lookup transformations are employed for data enrichment, and Derived Column transformations are used for inline calculations. Error handling is implemented using event handlers for OnError events. Naming conventions follow a clear and consistent pattern, ensuring readability and maintainability. Logging mechanisms are in place to track data flow and processing status.",
+"7. Complexity Analysis": {
+"Number of Lines": 1252,
+"Datasets Used": 15,
+"Joins Used": "Lookup transformations",
+"TRANSFORM Functions": 1,
+"RECORD Definitions": "None",
+"OUTPUT Statements": 1,
+"Conditional Logic": 1,
+"Indexing and Lookups": 15,
+"Function Calls": "None",
+"Performance Controls": "Batch operations with TABLOCK and CHECK_CONSTRAINTS",
+"External Dependencies": "Guidewire tables, Dimensional tables",
+"Overall Complexity Score": 85
+},
+"8. Key Outputs": [
+"FactClaimTransaction table containing enriched and transformed claim transaction data."
+],
+"Business Purpose of Outputs": "The outputs support business needs by providing accurate and up-to-date claim transaction records. These records are used for financial reporting, operational analysis, and decision-making. The outputs are stored in the FactClaimTransaction table and consumed by downstream systems for further processing and analysis. Monitoring mechanisms ensure output validity and traceability."
+}

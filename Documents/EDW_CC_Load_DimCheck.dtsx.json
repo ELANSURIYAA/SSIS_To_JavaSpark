@@ -1,0 +1,63 @@
+{
+"1. Overview of Program": "The SSIS script 'EDW_CC_Load_DimCheck.dtsx' is designed to update and maintain the DimCheck table in the data warehouse. It processes data from multiple source tables, applies complex transformations, and ensures data integrity through lookups and conditional logic. This script addresses the business need for accurate and up-to-date check-related information, which is critical for financial reporting and operational decision-making. It connects to the source systems and the data warehouse, performing operations such as data extraction, transformation, and loading (ETL) to support business processes.",
+"2. Code Structure and Design": "The script is structured into distinct tasks, including data extraction, transformation, and loading. Key SSIS elements include OLE DB Source components for data extraction, Lookup components for matching records, and OLE DB Destination components for loading data into the DimCheck table. Reusable logic is implemented through derived columns and conditional splits, ensuring modularity and maintainability. The design emphasizes data integrity and performance optimization.",
+"3. Data Flow and Processing Logic": {
+"Processed Datasets": ["DimCheck", "cc_check"],
+"Data Flow": "The script begins by extracting data from the cc_check source table using an OLE DB Source component. It then applies transformations, including derived columns and conditional splits, to prepare the data for loading. Lookup components are used to match records with the DimCheck table, and unmatched records are inserted while matched records are updated. The final step involves loading the processed data into the DimCheck table using an OLE DB Destination component."
+},
+"4. Data Mapping": [
+{
+"Target Dataset Name": "DimCheck",
+"Target Field Name": "CheckNumber",
+"Source Dataset Name": "cc_check",
+"Source Field Name": "CheckNumber",
+"Transformation Logic": "CAST(cc.CheckNumber AS VARCHAR(100))",
+"Business Purpose": "Standardize check numbers for reporting and analysis."
+},
+{
+"Target Dataset Name": "DimCheck",
+"Target Field Name": "IsPrimary",
+"Source Dataset Name": "cc_check",
+"Source Field Name": "IsPrimary",
+"Transformation Logic": "CASE WHEN cc.IsPrimary = 1 THEN 'Y' ELSE 'N' END",
+"Business Purpose": "Indicate whether the check is primary for operational decisions."
+},
+{
+"Target Dataset Name": "DimCheck",
+"Target Field Name": "BeanVersion",
+"Source Dataset Name": "cc_check",
+"Source Field Name": "BeanVersion",
+"Transformation Logic": "CONCAT(cc.BeanVersion, rpt.BeanVersion, cct.BeanVersion, rc.BeanVersion, dd.BeanVersion)",
+"Business Purpose": "Track versioning for data consistency and auditing."
+},
+{
+"Target Dataset Name": "DimCheck",
+"Target Field Name": "IsActive",
+"Source Dataset Name": "cc_check",
+"Source Field Name": "Retired",
+"Transformation Logic": "CASE WHEN cc.Retired != 0 THEN 0 ELSE 1 END",
+"Business Purpose": "Determine active status for operational use."
+}
+],
+"5. Performance Optimization Strategies": "The script employs efficient JOIN strategies, using Lookup components to match records with the DimCheck table. Indexing is applied to source and target tables to improve query performance. Conditional splits and derived columns are used to minimize data processing overhead. Batch operations are configured for large dataset handling, ensuring scalability and reliability.",
+"6. Technical Elements and Best Practices": "The script uses SSIS components such as OLE DB Source, Lookup, and OLE DB Destination for ETL operations. Error handling is implemented through event handlers, ensuring robust execution. Naming conventions are followed for clarity and maintainability. Logging mechanisms track data flow and processing outcomes, supporting quality control and recovery.",
+"7. Complexity Analysis": {
+"Number of Lines": 250,
+"Datasets Used": 2,
+"Joins Used": "Lookup (Match and No-Match Outputs)",
+"TRANSFORM Functions": 3,
+"RECORD Definitions": "None",
+"OUTPUT Statements": 1,
+"Conditional Logic": 4,
+"Indexing and Lookups": 2,
+"Function Calls": "None",
+"Performance Controls": "Batch operations with TABLOCK and ROWS_PER_BATCH settings.",
+"External Dependencies": "None",
+"Overall Complexity Score": 75
+},
+"8. Key Outputs": [
+"DimCheck table with updated and inserted records."
+],
+"Business Purpose of Outputs": "The outputs ensure accurate and up-to-date check-related information in the DimCheck table, supporting financial reporting and operational decision-making. The data is stored in the data warehouse and consumed by downstream systems for analysis and reporting. Monitoring mechanisms validate output integrity, ensuring reliability and traceability."
+}
+

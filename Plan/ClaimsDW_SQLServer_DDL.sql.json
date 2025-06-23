@@ -1,0 +1,45 @@
+{
+  "1. Cost Estimation": {
+    "1.1 Java Spark Runtime Cost": {
+      "Cluster Configuration": {
+        "Number of Executors": 4,
+        "Executor Memory": "16 GB",
+        "Driver Memory": "8 GB"
+      },
+      "Approximate Data Volume Processed": {
+        "Input Data": "Approximately 10% of the total data volume (~7 TB), including tables like DimUser, FactClaimTransaction, DimCheck, DimClaim, DimExposure, and DimClaimant.",
+        "Output Data": "Approximately 1 TB after processing and filtering."
+      },
+      "Time Taken for Each Phase": {
+        "Shuffle-heavy JOINs": "Not applicable (no explicit joins in the script).",
+        "Wide Transforms (e.g., ROLLUP, DENORMALIZE)": "Not applicable (no complex transforms in the script).",
+        "Output Writes": "1 hour for writing processed data to storage."
+      },
+      "Cost Model": {
+        "Pricing Model (e.g., DBU, vCPU Hour)": "Enterprise DBU Cost: $0.0146 - $0.1008 per hour (based on cluster size and cloud provider).",
+        "Total Runtime Cost": "Estimated $150–$300 for processing the data volume over a 4-executor cluster for 10 hours."
+      },
+      "Justification": [
+        "Minimal processing logic as the script primarily involves table creation.",
+        "Direct mapping of table definitions to Spark schema objects.",
+        "Resource allocation based on indicative data volume and processing requirements."
+      ]
+    }
+  },
+  "2. Code Fixing and Data Recon Testing Effort Estimation": {
+    "2.1 Estimated Effort in Hours": {
+      "Manual intervention and solutions of complex constructs during SSIS to Spark translation": 10,
+      "Data recon and pipeline testing, including test case creation, validation of intermediate datasets, and output comparison": 15,
+      "Syntax Differences": 5,
+      "Optimization Techniques": 10
+    },
+    "Major Contributors": {
+      "Rewriting nested TRANSFORMs or rollups": 0,
+      "Refactoring OUTPUT statements for Spark write APIs": 5,
+      "Managing schema consistency across distributed stages": 10
+    }
+  },
+  "3. API Cost": {
+    "apiCost": "0.013452 USD"
+  }
+}

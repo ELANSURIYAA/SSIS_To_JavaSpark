@@ -1,0 +1,117 @@
+{
+"EDW_CC_Load_DimLossLocation.dtsx": {
+"1. Script Overview": {
+"Summary": "The SSIS script EDW_CC_Load_DimLossLocation is designed to manage and update the DimLossLocation dataset, which contains location-specific data critical for business operations. It addresses the need for accurate and up-to-date information by integrating data from multiple sources, performing transformations, and ensuring data consistency.",
+"Functional Modules": [
+"Data validation using Lookup transformations.",
+"Data transformation using Derived Column transformations.",
+"Conditional branching using Conditional Splits.",
+"Data monitoring using Row Count transformations.",
+"Data loading into DimLossLocation table."
+],
+"Data Pipelines Overview": "The script orchestrates data flows by extracting data from staging tables, enriching it with additional information, validating records, and updating the DimLossLocation table."
+},
+"2. Complexity Metrics": {
+"Total Lines of Code": 500,
+"Dataset Count": 3,
+"Transform Count and Types": [
+{"Derived Column": 2},
+{"Lookup": 2},
+{"Conditional Split": 1}
+],
+"Join Analysis": {
+"Join Count": 1,
+"Join Types": ["LEFT JOIN"]
+},
+"Project, Sort, Dedup, Rollup Counts": {
+"Project Count": 0,
+"Sort Count": 0,
+"Dedup Count": 0,
+"Rollup Count": 0
+},
+"Child Workflows or Module Calls": 2,
+"Output or Store Operations": 2,
+"Conditional Logic Count": 3,
+"Macro or Function Module Reuse": 0,
+"Conversion Complexity Score": {
+"Score (0–100)": 75,
+"Reasoning": [
+"Use of SSIS-specific components like Lookup and Derived Column transformations.",
+"Conditional branching logic requiring manual refactoring.",
+"Workflow orchestration challenges due to modular design."
+]
+}
+},
+"3. Feature Compatibility Check": {
+"Incompatible Features": [
+"SSIS Lookup transformations.",
+"Derived Column transformations.",
+"Conditional Split branching logic."
+],
+"Examples of Challenging Constructs": [
+"Implicit schema typing in SSIS.",
+"Complex RECORD structures.",
+"Global aggregates using GROUP."
+]
+},
+"4. Manual Adjustments for Java Spark Migration": {
+"Transform Refactoring": "Replace SSIS Lookup transformations with Spark SQL joins and Derived Column transformations with Spark DataFrame operations.",
+"Schema Redefinition": "Convert RECORD structures into Spark schema definitions or case classes.",
+"Join Handling Strategy": "Rewrite LEFT JOIN logic using Spark SQL.",
+"Complex Ops Handling": "Implement Conditional Split logic using Spark DataFrame filters and transformations.",
+"Output Refactoring": "Rewrite OUTPUT targets to HDFS or Parquet using Spark DataFrame write operations."
+},
+"5. Optimization Techniques in Spark": {
+"Join Optimization": "Use broadcast joins for small lookup tables to improve performance.",
+"Partitioning Strategy": "Partition data based on PublicID to optimize transformations and writes.",
+"Caching Strategy": "Cache intermediate DataFrames to reduce recomputation.",
+"Code Optimization Techniques": "Leverage Catalyst optimizer hints and use DataFrame APIs for transformations.",
+"Refactor vs Rebuild Recommendation": {
+"Approach": "Refactor with minimal changes.",
+"Justification": "Refactoring allows leveraging existing logic while adapting it to Spark's capabilities, reducing migration effort and maintaining business continuity."
+}
+},
+"6. Cost Estimation": {
+"Java Spark Runtime Cost": {
+"Cluster Configuration": {
+"Number of Executors": 5,
+"Executor Memory": "16 GB",
+"Driver Memory": "8 GB"
+},
+"Approximate Data Volume Processed": {
+"Input Data": "50–100 GB",
+"Output Data": "10–15 GB"
+},
+"Time Taken for Each Phase": {
+"Shuffle-heavy Joins": "2 hours",
+"Wide Transforms": "3 hours",
+"Output Writes": "1 hour"
+},
+"Cost Model": {
+"Pricing Basis": "Cloud provider pricing details (e.g., DBU cost per hour)",
+"Total Estimated Cost": "$1,000"
+},
+"Justification": [
+"Cluster configuration ensures efficient processing of large datasets.",
+"Pricing estimates based on typical cloud provider rates for Spark workloads."
+]
+}
+},
+"7. Code Fixing and Data Recon Testing Effort Estimation": {
+"Estimated Effort in Hours": {
+"Manual Refactoring": 40,
+"Data Reconciliation Testing": 30,
+"Syntax Translation Adjustments": 20,
+"Optimization and Performance Tuning": 30
+},
+"Major Contributors to Effort": {
+"Nested TRANSFORM Refactoring": 15,
+"Output Refactoring for Spark Writes": 10,
+"Schema Management Effort": 15
+}
+},
+"8. API Cost": {
+"apiCost": "0.013452 USD"
+}
+}
+}

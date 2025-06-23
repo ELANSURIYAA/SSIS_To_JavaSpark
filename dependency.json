@@ -1,0 +1,70 @@
+{
+  "EDW_CC_Load_DimLossLocation.dtsx": [
+    "DimLossLocation"
+  ],
+  "EDW_CC_Load_DimClaim.dtsx": [
+    "DimClaim"
+  ],
+  "ClaimsDW_SQLServer_DDL.sql": [
+    "DimClaim",
+    "DimCheck",
+    "DimClaimant",
+    "DimExposure",
+    "DimLossLocation",
+    "DimUser",
+    "FactClaimTransaction",
+    "LossBodyParts"
+  ],
+  "EDW_CC_Load_DimClaimant.dtsx": [
+    "DimClaimant"
+  ],
+  "EDW_CC_Load_DimCheck.dtsx": [
+    "DimCheck"
+  ],
+  "EDW_CC_Load_DimUser.dtsx": [
+    "DimUser"
+  ],
+  "EDW_CC_ControlMaster.dtsx": [
+    "EDW_CC_Load_LossBodyParts",
+    "EDW_CC_Load_FactClaimTransaction",
+    "EDW_CC_Load_DimCheck",
+    "EDW_CC_Load_DimClaim",
+    "EDW_CC_Load_DimClaimant",
+    "EDW_CC_Load_DimExposure",
+    "EDW_CC_Load_DimUser",
+    "EDW_CC_Load_DimLossLocation"
+  ],
+  "EDW_CC_Load_LossBodyParts.dtsx": [
+    "LossBodyParts"
+  ],
+  "EDW_CC_Load_FactClaimTransaction.dtsx": [
+    "DimAccount",
+    "DimAgency",
+    "FactClaimTransaction",
+    "DimClaim",
+    "DimUser",
+    "DimClaimant",
+    "DimCompany",
+    "DimExposure",
+    "DimLossLocation",
+    "DimPolicy",
+    "DimProducer",
+    "DimDate",
+    "DimCheck"
+  ],
+  "EDW_CC_Load_DimExposure.dtsx": [
+    "DimExposure",
+    "cc_exposure",
+    "cc_coverage",
+    "cc_contact",
+    "cctl_jurisdiction",
+    "cctl_exposuretype",
+    "cctl_coveragetype",
+    "cctl_coveragesubtype",
+    "cctl_exposurestate",
+    "cctl_losspartytype",
+    "cctl_validationlevel",
+    "cctl_claimsegment",
+    "cctl_claimstrategy"
+  ]
+}

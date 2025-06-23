@@ -1,0 +1,45 @@
+{
+  "1. Cost Estimation": {
+    "1.1 Java Spark Runtime Cost": {
+      "Cluster Configuration": {
+        "Number of Executors": "4",
+        "Executor Memory": "16 GB",
+        "Driver Memory": "8 GB"
+      },
+      "Approximate Data Volume Processed": {
+        "Input Data": "1.5 TB (DimUser, cc_user, cc_contact, cc_credential, cc_organization)",
+        "Output Data": "150 GB (Filtered and transformed data)"
+      },
+      "Time Taken for Each Phase": {
+        "Shuffle-heavy JOINs": "2 hours",
+        "Wide Transforms (e.g., ROLLUP, DENORMALIZE)": "3 hours",
+        "Output Writes": "1 hour"
+      },
+      "Cost Model": {
+        "Pricing Model (e.g., DBU, vCPU Hour)": "Enterprise DBU Cost: $0.0146 - $0.1008 per hour",
+        "Total Runtime Cost": "$0.1008 per hour * 6 hours = $0.6048"
+      },
+      "Justification": [
+        "Cluster configuration optimized for data volume and processing requirements.",
+        "Shuffle-heavy operations necessitate higher memory and executor count.",
+        "Wide transforms require significant computational resources."
+      ]
+    }
+  },
+  "2. Code Fixing and Data Recon Testing Effort Estimation": {
+    "2.1 Estimated Effort in Hours": {
+      "Manual intervention and solutions of complex constructs during SSIS to Spark translation": "40 hours",
+      "Data recon and pipeline testing, including test case creation, validation of intermediate datasets, and output comparison": "20 hours",
+      "Syntax Differences": "15 hours",
+      "Optimization Techniques": "25 hours"
+    },
+    "Major Contributors": {
+      "Rewriting nested TRANSFORMs or rollups": "10 hours",
+      "Refactoring OUTPUT statements for Spark write APIs": "10 hours",
+      "Managing schema consistency across distributed stages": "20 hours"
+    }
+  },
+  "3. API Cost": {
+    "apiCost": "0.013452 USD"
+  }
+}

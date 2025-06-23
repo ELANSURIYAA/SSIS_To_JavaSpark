@@ -1,0 +1,50 @@
+{
+"1. Overview of Program": "The SSIS script EDW_CC_Load_DimClaim.dtsx is designed to load and update data into the DimClaim table. It involves operations such as updating claims, checking column updates, and loading data. The script uses components like OLE DB Source, Lookup, Derived Column, and Row Count. The purpose of this script is to ensure accurate and efficient data processing and loading for the DimClaim table in the EDW system, addressing business needs like claim tracking and reporting.",
+"2. Code Structure and Design": "The script is structured into multiple components, each performing specific tasks. Key components include OLE DB Source for fetching source data, Lookup for checking existing claims, Derived Column for column updates, Row Count for counting rows, and OLE DB Destination for loading data into the DimClaim table. The design ensures modularity and reusability, with clear naming conventions for each component.",
+"3. Data Flow and Processing Logic": {
+"Processed Datasets": ["DimClaim", "cc_claimindicator", "cc_claimcontact", "cc_contact", "cc_subrogationsummary", "cc_employmentdata", "cc_classcode", "cctl_state", "cctl_flaggedtype", "cctl_assignmentstatus", "cctl_claimsource", "cctl_lobcode", "cctl_subrogationstatus", "cctl_salvagestatus", "cctl_storagecategory", "cctl_losstype", "cctl_validationlevel", "cctl_faultrating", "cctl_personrelationtype", "cctl_weathertype", "cctl_claimstrategy", "cctl_losscause", "cctl_claimstate", "cctl_claimsegment", "cctl_howreportedtype", "cctl_largelossnotificationstat", "cctl_reinsuranceflaggedstatus", "cctl_claimtype_ext", "cc_incident", "cctl_wctypeoflosscode_ext", "cctl_specialcov_ext", "cc_workcomp", "cctl_compensabilitydecision", "cctl_jurisdiction", "cc_policylocation", "cc_address", "cctl_State", "cctl_claimclosedoutcometype"],
+"Data Flow": "Data is fetched from the source database using the OLE DB Source component. Lookup is used to check for existing claims in the DimClaim table. Derived Column transformation checks for column updates. Row Count components count rows for various operations. Finally, data is loaded into the DimClaim table using the OLE DB Destination component."
+},
+"4. Data Mapping": [
+{
+"Target Dataset Name": "DimClaim",
+"Target Field Name": "PublicId",
+"Source Dataset Name": "cc_claim",
+"Source Field Name": "PublicId",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Unique identifier for claims."
+},
+{
+"Target Dataset Name": "DimClaim",
+"Target Field Name": "BeanVersion",
+"Source Dataset Name": "cc_claim",
+"Source Field Name": "BeanVersion",
+"Transformation Logic": "Direct mapping",
+"Business Purpose": "Version tracking for claims."
+}
+],
+"5. Performance Optimization Strategies": "The script uses batch processing with 10,000 rows per batch for efficient loading. Proper indexing is applied to lookup and destination tables to optimize query performance. Parallel execution of data flows is considered to improve performance.",
+"6. Technical Elements and Best Practices": "The script uses SQL queries for data manipulation, including Update and Select statements. Parameters like BatchID and LegacySourceSystem are used for dynamic filtering. Metadata includes CodePage 1252 and data types like DT_STR, DT_DATE, and DT_INT. Error handling is implemented through event handlers, and logging ensures traceability. Naming conventions and modular design enhance maintainability.",
+"7. Complexity Analysis": {
+"Number of Lines": 1252,
+"Datasets Used": 40,
+"Joins Used": "HASH, MERGE",
+"TRANSFORM Functions": 5,
+"RECORD Definitions": 3,
+"OUTPUT Statements": 2,
+"Conditional Logic": 10,
+"Indexing and Lookups": 5,
+"Function Calls": 7,
+"Performance Controls": "Batch processing, indexing",
+"External Dependencies": ["SQL Server", "SSIS"],
+"Overall Complexity Score": 85
+},
+"8. Key Outputs": [
+"Number of rows processed from source.",
+"Number of rows inserted into DimClaim.",
+"Number of rows updated in DimClaim.",
+"Number of rows unchanged."
+],
+"Business Purpose of Outputs": "The outputs support business needs like claim tracking and reporting, ensuring data accuracy and completeness. They are stored in the DimClaim table and consumed by downstream systems for analytics and operational decision-making. Monitoring and validation checks ensure output reliability."
+}
+

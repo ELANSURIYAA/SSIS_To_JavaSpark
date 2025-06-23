@@ -1,0 +1,42 @@
+{
+  "EDW_CC_Load_DimLossLocation.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Complex derived column logic and multiple lookup operations."
+  },
+  "EDW_CC_Load_DimClaim.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Extensive use of derived columns and conditional splits."
+  },
+  "ClaimsDW_SQLServer_DDL.sql": {
+    "design_pattern": ["SF", "ST", "TT", "OO"],
+    "oo_reason": "DDL definitions for multiple tables and complex schema design."
+  },
+  "EDW_CC_Load_DimClaimant.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Multiple lookup operations and derived column transformations."
+  },
+  "EDW_CC_Load_DimCheck.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Complex logic for updating and inserting rows based on lookup results."
+  },
+  "EDW_CC_Load_DimUser.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Derived column transformations and multiple lookup operations."
+  },
+  "EDW_CC_ControlMaster.dtsx": {
+    "design_pattern": ["SF", "ST", "OO"],
+    "oo_reason": "Control master file orchestrating multiple SSIS packages."
+  },
+  "EDW_CC_Load_LossBodyParts.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Complex derived column logic and multiple lookup operations."
+  },
+  "EDW_CC_Load_FactClaimTransaction.dtsx": {
+    "design_pattern": ["JL", "DU", "DI", "DQ", "TT", "TAC", "TAG", "OO"],
+    "oo_reason": "Extensive use of lookup operations and derived column transformations."
+  },
+  "EDW_CC_Load_DimExposure.dtsx": {
+    "design_pattern": ["SF", "ST", "TAC", "TAG", "JL", "Tem", "DQ", "DU", "DI", "DS", "TT", "OO"],
+    "oo_reason": "Complex SQL queries and non-standard transformations that do not fit into predefined categories."
+  }
+}

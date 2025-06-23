@@ -1,0 +1,92 @@
+{
+  "title": "SSIS Design Pattern Analysis and Java Spark Optimization Recommendations",
+  "pattern_summary": [
+    {
+      "pattern": "SF-TF-TAG",
+      "frequency": "5 occurrences",
+      "percentage": "25%",
+      "description": "Patterns involving reading from a file source, performing transformations with aggregate functions, and writing to a file target."
+    },
+    {
+      "pattern": "ST-TT-JL",
+      "frequency": "3 occurrences",
+      "percentage": "15%",
+      "description": "Patterns involving reading from a table source, writing to a table target, and joining with another table."
+    },
+    {
+      "pattern": "ST-TT-TAC",
+      "frequency": "4 occurrences",
+      "percentage": "20%",
+      "description": "Patterns involving reading from a table source, writing to a table target, and performing arithmetic calculations during transformations."
+    },
+    {
+      "pattern": "ST-TT-TSC",
+      "frequency": "2 occurrences",
+      "percentage": "10%",
+      "description": "Patterns involving reading from a table source, writing to a table target, and performing statistical calculations during transformations."
+    },
+    {
+      "pattern": "ST-TT-DQ",
+      "frequency": "6 occurrences",
+      "percentage": "30%",
+      "description": "Patterns involving reading from a table source, writing to a table target, and performing data quality checks and rejection handling."
+    }
+  ],
+  "detailed_patterns": [
+    {
+      "pattern": "SF-TF-TAG",
+      "description": "This combination represents workflows where data is read from file sources, aggregated using functions like Sum and Count, and written back to file targets.",
+      "spark_suitability": "Highly suitable for Spark due to its distributed file processing and aggregation capabilities.",
+      "recommendations": [
+        "Use Spark's DataFrame API for efficient aggregation.",
+        "Leverage partitioning to optimize file read and write operations.",
+        "Use built-in aggregate functions for scalability.",
+        "Ensure proper file format compatibility (e.g., Parquet or ORC)."
+      ]
+    },
+    {
+      "pattern": "ST-TT-JL",
+      "description": "This combination represents workflows where data is read from database tables, joined with other tables, and written back to database tables.",
+      "spark_suitability": "Suitable for Spark, especially for large-scale joins and database integration.",
+      "recommendations": [
+        "Use Spark SQL for optimized join operations.",
+        "Cache intermediate results to improve performance.",
+        "Ensure proper indexing in source and target databases.",
+        "Use JDBC connectors for seamless database integration."
+      ]
+    },
+    {
+      "pattern": "ST-TT-TAC",
+      "description": "This combination represents workflows where data is read from database tables, transformed using arithmetic calculations, and written back to database tables.",
+      "spark_suitability": "Suitable for Spark, particularly for computationally intensive arithmetic transformations.",
+      "recommendations": [
+        "Use Spark's column expressions for arithmetic transformations.",
+        "Optimize transformations using Catalyst optimizer.",
+        "Leverage broadcast variables for small lookup tables.",
+        "Ensure proper data types for arithmetic operations."
+      ]
+    },
+    {
+      "pattern": "ST-TT-TSC",
+      "description": "This combination represents workflows where data is read from database tables, transformed using statistical calculations, and written back to database tables.",
+      "spark_suitability": "Highly suitable for Spark due to its built-in statistical functions and distributed computation capabilities.",
+      "recommendations": [
+        "Use Spark MLlib for advanced statistical computations.",
+        "Optimize transformations using DataFrame API.",
+        "Leverage distributed computation for scalability.",
+        "Ensure proper handling of null values in statistical calculations."
+      ]
+    },
+    {
+      "pattern": "ST-TT-DQ",
+      "description": "This combination represents workflows where data is read from database tables, subjected to data quality checks, and written back to database tables.",
+      "spark_suitability": "Highly suitable for Spark, especially for large-scale data quality checks.",
+      "recommendations": [
+        "Use Spark's DataFrame API for efficient filtering and validation.",
+        "Leverage UDFs for custom data quality rules.",
+        "Cache intermediate results to improve performance.",
+        "Use partitioning to optimize data processing."
+      ]
+    }
+  ]
+}
