@@ -2,91 +2,119 @@
   "title": "SSIS Design Pattern Analysis and Java Spark Optimization Recommendations",
   "pattern_summary": [
     {
-      "pattern": "SF-TF-TAG",
-      "frequency": "5 occurrences",
-      "percentage": "25%",
-      "description": "Patterns involving reading from a file source, performing transformations with aggregate functions, and writing to a file target."
+      "pattern": "ST-LKP-CSPL-DU-DI-TT",
+      "frequency": "8 occurrences",
+      "percentage": "80%",
+      "description": "Source Table extraction with Lookup pattern, Conditional Split for change detection, DML Update for existing records, DML Insert for new records, and Target Table loading",
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimClaimant.dtsx, EDW_CC_Load_DimExposure.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_DimUser.dtsx, EDW_CC_Load_LossBodyParts.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
     },
     {
-      "pattern": "ST-TT-JL",
-      "frequency": "3 occurrences",
-      "percentage": "15%",
-      "description": "Patterns involving reading from a table source, writing to a table target, and joining with another table."
-    },
-    {
-      "pattern": "ST-TT-TAC",
-      "frequency": "4 occurrences",
-      "percentage": "20%",
-      "description": "Patterns involving reading from a table source, writing to a table target, and performing arithmetic calculations during transformations."
-    },
-    {
-      "pattern": "ST-TT-TSC",
+      "pattern": "ST-JL-TAG-TT",
       "frequency": "2 occurrences",
-      "percentage": "10%",
-      "description": "Patterns involving reading from a table source, writing to a table target, and performing statistical calculations during transformations."
+      "percentage": "20%",
+      "description": "Source Table extraction with multiple Join operations, Transformation Aggregate Functions, and Target Table loading",
+      "Files That Follow This Design Pattern": "EDW_CC_Load_FactClaimTransaction.dtsx, EDW_CC_Load_LossBodyParts.dtsx"
     },
     {
-      "pattern": "ST-TT-DQ",
-      "frequency": "6 occurrences",
+      "pattern": "ST-DQ-DI-TT",
+      "frequency": "10 occurrences",
+      "percentage": "100%",
+      "description": "Source Table extraction with Data Quality checks, DML Insert operations, and Target Table loading",
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimClaimant.dtsx, EDW_CC_Load_DimExposure.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_DimUser.dtsx, EDW_CC_Load_LossBodyParts.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx, EDW_CC_ControlMaster.dtsx, ClaimsDW_SQLServer_DDL.sql"
+    },
+    {
+      "pattern": "Tem-DM-TT",
+      "frequency": "3 occurrences",
       "percentage": "30%",
-      "description": "Patterns involving reading from a table source, writing to a table target, and performing data quality checks and rejection handling."
+      "description": "Temporary table usage with DML Merge operations and Target Table loading",
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
+    },
+    {
+      "pattern": "ST-TAC-DU-TT",
+      "frequency": "4 occurrences",
+      "percentage": "40%",
+      "description": "Source Table extraction with Transformation Arithmetic Calculations, DML Update operations, and Target Table loading",
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
     }
   ],
   "detailed_patterns": [
     {
-      "pattern": "SF-TF-TAG",
-      "description": "This combination represents workflows where data is read from file sources, aggregated using functions like Sum and Count, and written back to file targets.",
-      "spark_suitability": "Highly suitable for Spark due to its distributed file processing and aggregation capabilities.",
+      "pattern": "ST-LKP-CSPL-DU-DI-TT",
+      "description": "This pattern extracts data from source tables, performs lookups against target tables to determine if records exist, uses conditional splits to separate new vs. existing records, updates existing records, inserts new records, and loads the final data into target tables",
+      "spark_suitability": "High - Spark excels at this pattern with its DataFrame API and SQL capabilities",
       "recommendations": [
-        "Use Spark's DataFrame API for efficient aggregation.",
-        "Leverage partitioning to optimize file read and write operations.",
-        "Use built-in aggregate functions for scalability.",
-        "Ensure proper file format compatibility (e.g., Parquet or ORC)."
-      ]
+        "Use Spark DataFrame's join operations with broadcast hints for efficient lookups against smaller dimension tables",
+        "Leverage Spark's 'when/otherwise' expressions for conditional logic instead of separate data paths",
+        "Implement saveMode='overwrite' with a custom merge strategy using DataFrame operations",
+        "Use Spark's partitioning to parallelize processing of large datasets during lookups and transformations",
+        "Consider using Delta Lake or similar technology for ACID transactions and simplified merge operations"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimClaimant.dtsx, EDW_CC_Load_DimExposure.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_DimUser.dtsx, EDW_CC_Load_LossBodyParts.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
     },
     {
-      "pattern": "ST-TT-JL",
-      "description": "This combination represents workflows where data is read from database tables, joined with other tables, and written back to database tables.",
-      "spark_suitability": "Suitable for Spark, especially for large-scale joins and database integration.",
+      "pattern": "ST-JL-TAG-TT",
+      "description": "This pattern extracts data from source tables, performs multiple join operations with lookup tables, applies aggregate functions for summarization, and loads the results into target tables",
+      "spark_suitability": "Very High - Spark was designed for distributed join and aggregation operations",
       "recommendations": [
-        "Use Spark SQL for optimized join operations.",
-        "Cache intermediate results to improve performance.",
-        "Ensure proper indexing in source and target databases.",
-        "Use JDBC connectors for seamless database integration."
-      ]
+        "Use DataFrame API's join operations with appropriate join hints (broadcast for small tables)",
+        "Leverage Spark SQL for complex multi-table joins with cleaner syntax",
+        "Apply DataFrame groupBy and aggregate functions for efficient distributed aggregations",
+        "Consider using Catalyst optimizer hints for complex join operations",
+        "Implement appropriate partitioning strategies based on join keys to minimize data shuffling"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_Load_FactClaimTransaction.dtsx, EDW_CC_Load_LossBodyParts.dtsx"
     },
     {
-      "pattern": "ST-TT-TAC",
-      "description": "This combination represents workflows where data is read from database tables, transformed using arithmetic calculations, and written back to database tables.",
-      "spark_suitability": "Suitable for Spark, particularly for computationally intensive arithmetic transformations.",
+      "pattern": "ST-DQ-DI-TT",
+      "description": "This pattern extracts data from source tables, performs data quality checks and validations, inserts qualified records into target tables, and often includes error handling for rejected records",
+      "spark_suitability": "High - Spark provides robust data validation capabilities",
       "recommendations": [
-        "Use Spark's column expressions for arithmetic transformations.",
-        "Optimize transformations using Catalyst optimizer.",
-        "Leverage broadcast variables for small lookup tables.",
-        "Ensure proper data types for arithmetic operations."
-      ]
+        "Use DataFrame filter, when/otherwise, and isNull/isNotNull operations for data validation",
+        "Implement custom UDFs for complex validation rules that can't be expressed with standard functions",
+        "Create separate DataFrames for valid and invalid records to handle them differently",
+        "Use Spark's exception handling within transformations to capture and log validation errors",
+        "Consider implementing Great Expectations or similar data quality frameworks that integrate with Spark"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimClaimant.dtsx, EDW_CC_Load_DimExposure.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_DimUser.dtsx, EDW_CC_Load_LossBodyParts.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx, EDW_CC_ControlMaster.dtsx, ClaimsDW_SQLServer_DDL.sql"
     },
     {
-      "pattern": "ST-TT-TSC",
-      "description": "This combination represents workflows where data is read from database tables, transformed using statistical calculations, and written back to database tables.",
-      "spark_suitability": "Highly suitable for Spark due to its built-in statistical functions and distributed computation capabilities.",
+      "pattern": "Tem-DM-TT",
+      "description": "This pattern creates temporary tables or views, performs merge operations (combining insert, update, and sometimes delete logic), and loads the final results into target tables",
+      "spark_suitability": "Medium-High - Spark has improved merge capabilities with newer versions",
       "recommendations": [
-        "Use Spark MLlib for advanced statistical computations.",
-        "Optimize transformations using DataFrame API.",
-        "Leverage distributed computation for scalability.",
-        "Ensure proper handling of null values in statistical calculations."
-      ]
+        "Use Delta Lake, Hudi, or Iceberg tables which provide native support for merge operations",
+        "For standard Spark without these extensions, implement merge logic using left anti-joins for inserts and left semi-joins for updates",
+        "Consider using temporary views for complex intermediate transformations",
+        "Implement appropriate checkpointing for long-running merge operations to enable recovery",
+        "Use DataFrame cache() or persist() methods for temporary datasets that are reused multiple times"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
     },
     {
-      "pattern": "ST-TT-DQ",
-      "description": "This combination represents workflows where data is read from database tables, subjected to data quality checks, and written back to database tables.",
-      "spark_suitability": "Highly suitable for Spark, especially for large-scale data quality checks.",
+      "pattern": "ST-TAC-DU-TT",
+      "description": "This pattern extracts data from source tables, performs arithmetic calculations during transformation, updates existing records in target tables, and ensures the final data is properly loaded",
+      "spark_suitability": "High - Spark's DataFrame API provides rich mathematical functions",
       "recommendations": [
-        "Use Spark's DataFrame API for efficient filtering and validation.",
-        "Leverage UDFs for custom data quality rules.",
-        "Cache intermediate results to improve performance.",
-        "Use partitioning to optimize data processing."
-      ]
+        "Use Spark's built-in mathematical functions and expressions for calculations instead of UDFs when possible",
+        "Leverage DataFrame's withColumn method for adding calculated columns",
+        "Consider using Spark SQL for complex calculations that are more clearly expressed in SQL syntax",
+        "Implement appropriate null handling in calculations using coalesce or nvl functions",
+        "For update operations, use Delta Lake's merge capabilities or implement update logic with standard Spark operations"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_Load_DimClaim.dtsx, EDW_CC_Load_DimCheck.dtsx, EDW_CC_Load_DimLossLocation.dtsx, EDW_CC_Load_FactClaimTransaction.dtsx"
+    },
+    {
+      "pattern": "OO-DQ-DI-TT",
+      "description": "This pattern represents the orchestration and control flow logic, with data quality checks, insert operations for logging, and target table updates for process tracking",
+      "spark_suitability": "Medium - Spark is primarily a data processing engine rather than an orchestration tool",
+      "recommendations": [
+        "Use Apache Airflow, Oozie, or similar workflow management tools for orchestration instead of pure Spark",
+        "Implement job control tables in a database for tracking process status and execution history",
+        "Use Spark's logging capabilities to record execution metrics and error information",
+        "Consider implementing a custom framework for standardized logging and error handling across jobs",
+        "Leverage Spark's accumulators for collecting metrics during job execution"
+      ],
+      "Files That Follow This Design Pattern": "EDW_CC_ControlMaster.dtsx"
     }
   ]
 }
