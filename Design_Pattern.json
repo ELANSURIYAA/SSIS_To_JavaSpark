@@ -114,7 +114,7 @@
         "Consider implementing a custom framework for standardized logging and error handling across jobs",
         "Leverage Spark's accumulators for collecting metrics during job execution"
       ],
-      "Files That Follow This Design Pattern": "EDW_CC_ControlMaster.dtsx"
+      "Files That Follow This Design Pattern": "EDW_CC_ControlMaster.dtsx,EDW_CC_Load_DimCheck.dtsx"
     }
   ]
 }
